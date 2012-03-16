@@ -70,7 +70,7 @@ class AuthViewNamedURLTests(AuthViewsTestCase):
             ('password_reset', [], {}),
             ('password_reset_done', [], {}),
             ('password_reset_confirm', [], {
-                'uidb36': 'aaaaaaa',
+                'uidb64': 'aaaaaaa',
                 'token': '1111-aaaaa',
             }),
             ('password_reset_complete', [], {}),
