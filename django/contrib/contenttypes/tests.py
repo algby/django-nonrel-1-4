@@ -2,7 +2,7 @@ from __future__ import with_statement
 
 import urllib
 
-from django.db import models
+from django.db import models, router, connections
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.views import shortcut
 from django.contrib.sites.models import Site
@@ -10,7 +10,7 @@ from django.http import HttpRequest, Http404
 from django.test import TestCase
 from django.utils.encoding import smart_str
 from django.test.utils import override_settings
-
+from django.utils import unittest
 
 class FooWithoutUrl(models.Model):
     """
@@ -115,6 +115,7 @@ class ContentTypesTests(TestCase):
             FooWithUrl: ContentType.objects.get_for_model(FooWithUrl),
         })
 
+	@unittest.skipIf(not connections[router.db_for_read(FooWithUrl)].features.supports_joins, 'Requires JOIN support')
     @override_settings(ALLOWED_HOSTS=['example.com'])
     def test_shortcut_view(self):
         """
@@ -158,6 +159,7 @@ class ContentTypesTests(TestCase):
 
         self.assertRaises(Http404, shortcut, request, user_ct.id, obj.id)
 
+    @unittest.skipIf(not connections[router.db_for_read(FooWithBrokenAbsoluteUrl)].features.supports_joins, 'Requires JOIN support')
     def test_shortcut_view_with_broken_get_absolute_url(self):
         """
         Check that the shortcut view does not catch an AttributeError raised
