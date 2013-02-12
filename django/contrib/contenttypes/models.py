@@ -117,6 +117,17 @@ class ContentTypeManager(models.Manager):
         self.__class__._cache.setdefault(using, {})[key] = ct
         self.__class__._cache.setdefault(using, {})[ct.id] = ct
 
+    def _remove_from_cache(self, using, ct):
+        model = ct.model_class()
+        key = (model._meta.app_label, model._meta.object_name.lower())
+
+        if using in self.__class__.cache and key in self.__class__.cache[using]:
+            del self.__class__.cache[using][key]
+
+        if using in self.__class__.cache and ct.id in self.__class__.cache[using]:
+            del self.__class__.cache[using][ct.id]
+
+
 class ContentType(models.Model):
     name = models.CharField(max_length=100)
     app_label = models.CharField(max_length=100)
