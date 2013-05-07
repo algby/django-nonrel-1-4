@@ -119,6 +119,9 @@ class ContentTypeManager(models.Manager):
 
     def _remove_from_cache(self, using, ct):
         model = ct.model_class()
+        if model is None:
+            return
+
         key = (model._meta.app_label, model._meta.object_name.lower())
 
         if using in self.__class__.cache and key in self.__class__.cache[using]:
