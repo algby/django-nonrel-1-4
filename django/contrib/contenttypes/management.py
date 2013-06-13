@@ -41,7 +41,7 @@ def update_contenttypes(app, created_models, verbosity=2, **kwargs):
         ContentType.objects.get_for_model(app_models[obj.model])
 
     if verbosity >= 2:
-        for ct in cts:
+        for ct in to_create:
             print "Adding content type '%s | %s'" % (ct.app_label, ct.model)
 
     # Confirm that the content type is stale before deletion.
