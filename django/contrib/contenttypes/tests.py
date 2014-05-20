@@ -115,7 +115,7 @@ class ContentTypesTests(TestCase):
             FooWithUrl: ContentType.objects.get_for_model(FooWithUrl),
         })
 
-	@unittest.skipIf(not connections[router.db_for_read(FooWithUrl)].features.supports_joins, 'Requires JOIN support')
+    @unittest.skipIf(not connections[router.db_for_read(FooWithUrl)].features.supports_joins, 'Requires JOIN support')
     @override_settings(ALLOWED_HOSTS=['example.com'])
     def test_shortcut_view(self):
         """
